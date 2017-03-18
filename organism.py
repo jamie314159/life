@@ -1,7 +1,7 @@
 #!/usr/bin/python3
 
 class Organism(object):
-	def __init__(self, size = 10):	
+	def __init__(self, size = 1):	
 		self.size = size
 
 	def update(self, world):
@@ -9,7 +9,7 @@ class Organism(object):
 
 
 class Animal(Organism):
-	def __init__(self, speed = 5, sight = 20, food = 10, life = 10):
+	def __init__(self, speed = 5, sight = 100, food = 10, life = 10):
 		super(Animal,self).__init__()
 		self.type = "animal"
 		self.speed = speed
@@ -19,25 +19,25 @@ class Animal(Organism):
 
 	def eatPlant(self, target):
 		if target.size > 0:
-			target.size -= self.size * 0.2
-			self.food += self.size * 0.2
+			target.size -= 3
+			self.food += 2
 
 	def update(self, world):
 		visible = world.getVisible(self)
 		if len(visible) > 0:
-			visible.sort(key = lambda x: world.getDistBetweenOrganisms(self, x), reverse = False)
-			organism = visible[0]
-			if organism.type == "plant":
-				if world.getDistBetweenOrganisms(self, organism) < 2.5:
-					self.eatPlant(organism)
+			visible.sort(key = lambda x: world.getDistanceOrganisms(self, x), reverse = False)
+			targetOrganism = visible[0]
+			if targetOrganism.type == "plant":
+				if world.getDistanceOrganisms(self, targetOrganism) < 0.5:
+					self.eatPlant(targetOrganism)
 				else:
-					world.moveTowardsOrganism(self, organism, self.speed)
-			elif organism.type == "animal":
-				world.moveTowardsOrganism(self, organism, -self.speed)
+					world.moveTowardsOrganism(self, targetOrganism, self.speed)
+			elif targetOrganism.type == "animal":
+				world.moveTowardsOrganism(self, targetOrganism, -self.speed)
 		else:
-			world.moveRandom(self, speed)
+			world.moveRandom(self, self.speed)
 
-		self.food -= 1
+		# self.food -= 1
 		if self.food < 1:
 			self.life -= 1
 
@@ -48,7 +48,7 @@ class Animal(Organism):
 		self.size = self.food
 
 		if self.life < 1:
-			world.killOrganism(self)
+			world.killtargetOrganism(self)
 
 
 
@@ -64,7 +64,7 @@ class Plant(Organism):
 		if self.size < 20:
 			self.size = self.size + 1
 
-		if self.size < 1:
+		if self.size < 2:
 			world.killOrganism(self)
 
 

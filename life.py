@@ -17,8 +17,8 @@ def main():
 	# myWorld.addOrganism(organism.Animal(), (20,20))
 	myWorld.addOrganism(organism.Animal(), (50,50))
 
-	for i in range(50):
-		myWorld.addOrganism(organism.Plant(), (random.randrange(90),random.randrange(90)))
+	for i in range(2):
+		myWorld.addOrganism(organism.Plant(), (random.randrange(100),random.randrange(100)))
 
 
 	myWindow.world = myWorld
@@ -27,7 +27,7 @@ def main():
 	def update():
 		myWorld.update()
 		myWindow.update()
-		myWindow.root.after(1000,update)
+		myWindow.root.after(500,update)
 
 
 
